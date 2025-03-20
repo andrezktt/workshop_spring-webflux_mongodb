@@ -33,6 +33,23 @@ public class UserService {
 		return result;
 	}
 
+	public Mono<UserDTO> update(String id, UserDTO dto) {
+		return repository.findById(id)
+				.flatMap(user -> {
+					user.setName(dto.getName());
+					user.setEmail(dto.getEmail());
+					return repository.save(user);
+				})
+				.map(UserDTO::new)
+				.switchIfEmpty(Mono.error(new ResourceNotFoundException("Recurso não encontrado!")));
+	}
+
+	public Mono<Void> delete(String id) {
+		return repository.findById(id)
+				.switchIfEmpty(Mono.error(new ResourceNotFoundException("Recurso não encontrado!")))
+				.flatMap(user -> repository.delete(user));
+	}
+
 	private void copyDtoToEntity(UserDTO dto, User entity) {
 		entity.setName(dto.getName());
 		entity.setEmail(dto.getEmail());
