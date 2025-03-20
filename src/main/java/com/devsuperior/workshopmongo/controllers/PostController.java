@@ -37,13 +37,12 @@ public class PostController {
 		return service.findById(id).map(ResponseEntity::ok);
 	}
 
-//	@GetMapping(value = "/titlesearch")
-//	public ResponseEntity<List<PostDTO>> findByTitle(@RequestParam(value = "text", defaultValue = "") String text) throws UnsupportedEncodingException {
-//		text = URL.decodeParam(text);
-//		List<PostDTO> list = service.findByTitle(text);
-//		return ResponseEntity.ok(list);
-//	}
-//
+	@GetMapping(value = "/titlesearch")
+	public Flux<PostDTO> findByTitle(@RequestParam(value = "text", defaultValue = "") String text) throws UnsupportedEncodingException {
+		text = URL.decodeParam(text);
+		return service.findByTitle(text);
+	}
+
 //	@GetMapping(value = "/fullsearch")
 //	public ResponseEntity<List<PostDTO>> fullSearch(
 //			@RequestParam(value = "text", defaultValue = "") String text,
