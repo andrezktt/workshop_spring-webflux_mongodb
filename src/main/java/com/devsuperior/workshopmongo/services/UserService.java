@@ -1,5 +1,6 @@
 package com.devsuperior.workshopmongo.services;
 
+import com.devsuperior.workshopmongo.entities.User;
 import com.devsuperior.workshopmongo.services.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,5 +24,17 @@ public class UserService {
 		return repository.findById(id)
 				.map(UserDTO::new)
 				.switchIfEmpty(Mono.error(new ResourceNotFoundException("Recurso não encontrado!")));
+	}
+
+	public Mono<UserDTO> insert(UserDTO dto) {
+		User entity = new User();
+		copyDtoToEntity(dto, entity);
+		Mono<UserDTO> result = repository.save(entity).map(UserDTO::new);
+		return result;
+	}
+
+	private void copyDtoToEntity(UserDTO dto, User entity) {
+		entity.setName(dto.getName());
+		entity.setEmail(dto.getEmail());
 	}
 }
