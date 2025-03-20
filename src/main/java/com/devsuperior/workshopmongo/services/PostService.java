@@ -11,6 +11,9 @@ import com.devsuperior.workshopmongo.dto.PostDTO;
 import com.devsuperior.workshopmongo.entities.Post;
 import com.devsuperior.workshopmongo.repositories.PostRepository;
 import com.devsuperior.workshopmongo.services.exceptions.ResourceNotFoundException;
+import org.springframework.web.bind.annotation.GetMapping;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 @Service
 public class PostService {
@@ -18,12 +21,14 @@ public class PostService {
 	@Autowired
 	private PostRepository repository;
 
-//	@Transactional(readOnly = true)
-//	public PostDTO findById(String id) {
-//		Post post = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Recurso não encontrado"));
-//		return new PostDTO(post);
-//	}
-//
+	public Flux<PostDTO> findAll() {
+		return repository.findAll().map(PostDTO::new);
+	}
+
+	public Mono<PostDTO> findById(String id) {
+		return repository.findById(id).map(PostDTO::new);
+	}
+
 //	public List<PostDTO> findByTitle(String text) {
 //		List<PostDTO> result = repository.searchTitle(text).stream().map(x -> new PostDTO(x)).toList();
 //		return result;
